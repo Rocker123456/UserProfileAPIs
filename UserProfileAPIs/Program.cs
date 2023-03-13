@@ -1,11 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using UserProfileAPIs.Database;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//Read configuration
+var configValue = builder.Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<UserProfileContext>(options =>
+                options.UseSqlServer(configValue));
 
 var app = builder.Build();
 
