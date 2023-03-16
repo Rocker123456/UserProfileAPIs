@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using UserProfileAPIs.Database;
+using UserProfileAPIs.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-//Read configuration
-var configValue = builder.Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
 
 // Add services to the container.
 
@@ -12,7 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserProfileContext>(options =>
-                options.UseSqlServer(configValue));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddTransient<IUserService, UserService>();
 
 var app = builder.Build();
 
